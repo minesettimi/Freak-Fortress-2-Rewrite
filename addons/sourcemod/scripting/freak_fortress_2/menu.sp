@@ -21,8 +21,6 @@ void Menu_PluginStart()
 	RegFreakCmd("queue", Menu_QueueMenuCmd, "Freak Fortress 2 Queue Menu");
 	RegFreakCmd("next", Menu_QueueMenuCmd, "Freak Fortress 2 Queue Menu", FCVAR_HIDDEN);
 	
-	RegFreakCmd("hud", Menu_HudToggle, "Freak Fortress 2 HUD Preference");
-	
 	RegAdminCmd("ff2_addpoints", Menu_AddPointsCmd, ADMFLAG_CHEATS, "Add Queue Points to a Player");
 }
 
@@ -40,7 +38,7 @@ public Action Menu_MainMenuCmd(int client, int args)
 {
 	if(!client)
 	{
-		PrintToServer("Freak Fortress 2: Rewrite (%s.%s)", PLUGIN_VERSION, PLUGIN_VERSION_REVISION);
+		PrintToServer("Freak Fortress 2: Rewrite (%s)", PLUGIN_VERSION);
 		
 		if(CvarDebug.BoolValue)
 			PrintToServer("Debug Mode Enabled");
@@ -81,7 +79,7 @@ public Action Menu_MainMenuCmd(int client, int args)
 	}
 	else if(GetCmdReplySource() == SM_REPLY_TO_CONSOLE)
 	{
-		PrintToConsole(client, "Freak Fortress 2: Rewrite (%s.%s)", PLUGIN_VERSION, PLUGIN_VERSION_REVISION);
+		PrintToConsole(client, "Freak Fortress 2: Rewrite (%s)", PLUGIN_VERSION);
 		PrintToConsole(client, "%T", "Available Commands", client);
 	}
 	else
@@ -95,7 +93,7 @@ public Action Menu_MainMenuCmd(int client, int args)
 void Menu_MainMenu(int client)
 {
 	Menu menu = new Menu(Menu_MainMenuH);
-	menu.SetTitle("Freak Fortress 2: Rewrite (%s.%s)", PLUGIN_VERSION, PLUGIN_VERSION_REVISION);
+	menu.SetTitle("Freak Fortress 2: Rewrite (%s)", PLUGIN_VERSION);
 	
 	char buffer[64];
 	SetGlobalTransTarget(client);
@@ -113,9 +111,6 @@ void Menu_MainMenu(int client)
 	menu.AddItem("", buffer);
 	
 	FormatEx(buffer, sizeof(buffer), "%t", "Command Weapon");
-	menu.AddItem("", buffer);
-	
-	FormatEx(buffer, sizeof(buffer), "%t", "Command Hud");
 	menu.AddItem("", buffer);
 	
 	menu.ExitButton = true;
@@ -154,11 +149,6 @@ public int Menu_MainMenuH(Menu menu, MenuAction action, int client, int choice)
 				case 4:
 				{
 					Weapons_ChangeMenu(client);
-				}
-				case 5:
-				{
-					Menu_HudToggle(client, 0);
-					Menu_MainMenu(client);
 				}
 			}
 		}
@@ -312,20 +302,6 @@ public int ResetQueueMenuH(Menu menu, MenuAction action, int client, int choice)
 	return 0;
 }
 
-public Action Menu_HudToggle(int client, int args)
-{
-	if(client)
-	{
-		Client(client).NoDmgHud = !Client(client).NoDmgHud;
-		FReplyToCommand(client, "%t", Client(client).NoDmgHud ? "Damage Hud Disabled" : "Damage Hud Enabled");
-	}
-	else
-	{
-		ReplyToCommand(client, "[SM] %t", "Command is in-game only");
-	}
-	return Plugin_Handled;
-}
-
 public Action Menu_AddPointsCmd(int client, int args)
 {
 	if(args == 2)
@@ -366,7 +342,7 @@ static void AddPointsMenu(int client, const char[] userid = NULL_STRING)
 	{
 		Menu menu = new Menu(Menu_AddPointsActionH);
 		
-		menu.SetTitle("%T%N\n ", "Queue Menu", client, target);
+		menu.SetTitle("%T%N\n ", "Add Points Command", client, target);
 		
 		menu.AddItem(userid, "1000");
 		menu.AddItem(userid, "100");
@@ -382,7 +358,7 @@ static void AddPointsMenu(int client, const char[] userid = NULL_STRING)
 	{
 		Menu menu = new Menu(Menu_AddPointsTargetH);
 		
-		menu.SetTitle("%T", "Queue Menu", client);
+		menu.SetTitle("%T", "Add Points Command", client);
 		
 		AddTargetsToMenu(menu, client);
 		
