@@ -42,6 +42,11 @@ void ConVar_PluginStart()
 	CvarSoundType = CreateConVar("ff2_boss_globalsounds", "0", "If default sounds are globally heard", _, true, 0.0, true, 1.0);
 	CvarDisguiseModels = CreateConVar("ff2_game_disguises", "1", "If to use rome vision to apply custom models to disguises.\nChanges won't apply right away, recommended only to change with a map restart.", _, true, 0.0, true, 1.0);
 	
+	CvarEnableCapture = CreateConVar("ff2_game_enable_capture", "1", "Enables the control point to be captured by players", _, true, 0.0, true, 1.0);
+	CvarPlayerGlow = CreateConVar("ff2_game_last_glow", "1", "If the final mercenary of a team will be highlighted.", _, true, 0.0, true, 1.0);
+	CvarSniperClimbDelay = CreateConVar("ff2_game_climb_delay", "1.56", "Delay between sniper climbing 0 = Disabled", _, true, 0.0);
+	CvarSniperClimbDmg = CreateConVar("ff2_game_climb_damage",  "15.0", "Damage taken when snipers climb walls.", _, true, 0.0);
+	CvarRageOnSap = CreateConVar("ff2_game_sap_rage", "30.0", "Rage given every time a spy saps a boss.", _, true, 0.0, true, 1.0);
 	CreateConVar("ff2_oldjump", "1", "Backwards Compatibility ConVar", FCVAR_DONTRECORD|FCVAR_HIDDEN, true, 0.0, true, 1.0);
 	CreateConVar("ff2_base_jumper_stun", "0", "Backwards Compatibility ConVar", FCVAR_DONTRECORD|FCVAR_HIDDEN, true, 0.0, true, 1.0);
 	CreateConVar("ff2_solo_shame", "1", "Backwards Compatibility ConVar", FCVAR_DONTRECORD|FCVAR_HIDDEN, true, 0.0, true, 1.0);

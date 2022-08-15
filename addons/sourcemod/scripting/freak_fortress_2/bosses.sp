@@ -1660,30 +1660,32 @@ void Bosses_CreateFromConfig(int client, ConfigMap cfg, int team)
 	
 	Goomba_BossCreated(Client(client).Cfg);
 	
-	if(Client(client).Cfg.GetInt("companion", i))
-	{
-		bool disband;
-		int companion = Preference_GetCompanion(client, i, team, disband);
-		if(companion)
+	if (GetClientCount(true) > 2) {
+		if(Client(client).Cfg.GetInt("companion", i))
 		{
-			Bosses_CreateFromSpecial(companion, i, team);
-			
-			if(disband)
+			bool disband;
+			int companion = Preference_GetCompanion(client, i, team, disband);
+			if(companion)
 			{
-				Preference_FinishParty(client);
-				Preference_FinishParty(companion);
+				Bosses_CreateFromSpecial(companion, i, team);
+				
+				if(disband)
+				{
+					Preference_FinishParty(client);
+					Preference_FinishParty(companion);
+				}
 			}
-		}
-		else
-		{
-			i = RoundFloat(Client(client).MaxHealth * 2.8);
-			Client(client).MaxHealth = i;
-			Client(client).Cfg.SetInt("health_formula", i);
-			
-			if(IsPlayerAlive(client))
+			else
 			{
-				SetEntityHealth(client, i);
-				Bosses_UpdateHealth(client);
+				i = RoundFloat(Client(client).MaxHealth * 2.8);
+				Client(client).MaxHealth = i;
+				Client(client).Cfg.SetInt("health_formula", i);
+				
+				if(IsPlayerAlive(client))
+				{
+					SetEntityHealth(client, i);
+					Bosses_UpdateHealth(client);
+				}
 			}
 		}
 	}

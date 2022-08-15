@@ -186,6 +186,10 @@ ConVar CvarAggressiveSwap;
 ConVar CvarAggressiveOverlay;
 ConVar CvarSoundType;
 ConVar CvarDisguiseModels;
+ConVar CvarPlayerGlow;
+ConVar CvarSniperClimbDelay;
+ConVar CvarSniperClimbDmg;
+ConVar CvarRageOnSap;
 
 ConVar CvarAllowSpectators;
 ConVar CvarMovementFreeze;
@@ -390,6 +394,12 @@ public Action OnPlayerRunCmd(int client, int &buttons)
 
 public Action TF2_CalcIsAttackCritical(int client, int weapon, char[] weaponname, bool &result)
 {
+	if (Enabled && !Client(client).IsBoss && RoundStatus == 1 && IsValidEntity(weapon))
+	{
+		if (StrEqual(weaponname, "tf_weapon_club"))
+			Weapons_SickleClimb(client, weapon);
+	}
+
 	if(!Client(client).IsBoss || Client(client).Crits || TF2_IsCritBoosted(client))
 		return Plugin_Continue;
 	

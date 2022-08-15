@@ -402,6 +402,7 @@ void Gamemode_RoundStart()
 
 void Gamemode_CheckPointUnlock(int alive, bool notice)
 {
+
 	if(PointUnlock > 0 && alive <= PointUnlock)
 	{
 		if(notice && !GetControlPoint())
