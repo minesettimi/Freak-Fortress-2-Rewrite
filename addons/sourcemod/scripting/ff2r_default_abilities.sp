@@ -2177,7 +2177,7 @@ void Rage_NewWeapon(int client, ConfigData cfg, const char[] ability)
 			{
 				DataPack pack = CreateDataPack();
 				pack.WriteCell(client);
-				pack.WriteCell(TF2_GetClassnameSlot(classname, true));
+				pack.WriteCell(entity);
 				CreateTimer(duration, Timer_RemoveWeapon, pack);
 			}
 		}
@@ -2215,11 +2215,14 @@ public Action Timer_RemoveWeapon(Handle timer, DataPack pack)
 	if(!client)
 		return Plugin_Handled;
 
-	int slot = pack.ReadCell();
+	int entity = pack.ReadCell();
 
 	CloseHandle(pack);
 
-	TF2_RemoveWeaponSlot(client, slot);
+	if (IsValidEntity(entity))
+	{
+		RemoveEntity(entity);
+	}
 
 	int melee = GetPlayerWeaponSlot(client, 2);
 
