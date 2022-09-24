@@ -42,12 +42,6 @@ public Plugin myinfo =
 	url = ""
 };
 
-
-public void OnPluginStart()
-{
-	
-}
-
 public void FF2R_OnAbility(int client, const char[] ability, AbilityData cfg)
 {
 	if (!StrContains(ability, "rage_spellbook", false))
