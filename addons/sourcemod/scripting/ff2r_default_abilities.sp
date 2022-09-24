@@ -111,6 +111,7 @@
 		"max"			"5"								// Max weapon ammo (For forumla purposes)
 		"show"			"true"							// Weapon visibility
 		"worldmodel"	""								// Weapon worldmodel
+		"duration"		"-1"							// How long to keep weapon (-1 dont remove)
 		"alpha"			"255"							// Weapon alpha
 		"red"			"255"							// Weapon red
 		"green"			"255"							// Weapon green
@@ -1976,6 +1977,8 @@ void Rage_NewWeapon(int client, ConfigData cfg, const char[] ability)
 	int index = cfg.GetInt("index");
 	int level = cfg.GetInt("level", -1);
 	int quality = cfg.GetInt("quality", 5);
+	int team = CvarFriendlyFire.BoolValue ? -1 : GetClientTeam(client);
+	float duration = GetFormula(cfg, "duration", GetTotalPlayersAlive(team), -1.0);
 	bool preserve = cfg.GetBool("preserve");
 	
 	int kills = cfg.GetInt("rank", -99);
@@ -2158,7 +2161,77 @@ void Rage_NewWeapon(int client, ConfigData cfg, const char[] ability)
 				FakeClientCommand(client, "use %s", classname);
 			}
 		}
+
+		PrintToServer("%i", TF2_GetClassnameSlot(classname, true));
+
+		if (duration != -1)
+		{
+			if (wearable)
+			{
+				DataPack pack = CreateDataPack();
+				pack.WriteCell(client);
+				pack.WriteCell(entity);
+				CreateTimer(duration, Timer_RemoveWearable, pack);
+			}
+			else
+			{
+				DataPack pack = CreateDataPack();
+				pack.WriteCell(client);
+				pack.WriteCell(TF2_GetClassnameSlot(classname, true));
+				CreateTimer(duration, Timer_RemoveWeapon, pack);
+			}
+		}
 	}
+}
+
+public Action Timer_RemoveWearable(Handle timer, DataPack pack)
+{
+	pack.Reset();
+	int client = pack.ReadCell();
+
+	if(!client)
+		return Plugin_Handled;
+
+
+	int entity = pack.ReadCell();
+
+	CloseHandle(pack);
+
+	if (IsValidEntity(entity))
+	{
+		TF2_RemoveWearable(client, entity);
+	}
+
+	return Plugin_Handled;
+}
+
+public Action Timer_RemoveWeapon(Handle timer, DataPack pack)
+{
+	
+	pack.Reset();
+	int client = pack.ReadCell();
+
+
+	if(!client)
+		return Plugin_Handled;
+
+	int slot = pack.ReadCell();
+
+	CloseHandle(pack);
+
+	TF2_RemoveWeaponSlot(client, slot);
+
+	int melee = GetPlayerWeaponSlot(client, 2);
+
+	if (!melee) 
+		return Plugin_Handled;
+
+	char buffer[128];
+	GetEntityClassname(melee, buffer, sizeof(buffer));
+
+	FakeClientCommand(client, "use %s", buffer);
+
+	return Plugin_Handled;
 }
 
 void Rage_CloneAttack(int client, ConfigData cfg)
