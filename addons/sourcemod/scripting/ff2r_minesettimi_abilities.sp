@@ -77,7 +77,7 @@ int FindSpellBook(int client)
 	{
 		if (IsValidEntity(book) && GetEntPropEnt(book, Prop_Send, "m_hOwnerEntity") == client)
 		{
-			if (!GetEntProp(book, Prop_Send, "m_bDisguiseWepaon"))
+			if (!GetEntProp(book, Prop_Send, "m_bDisguiseWeapon"))
 			{
 				return book;
 			}
