@@ -1778,7 +1778,7 @@ static void EquipBoss(int client, bool weapons)
 	{
 		switch(GetEntProp(index, Prop_Send, "m_iItemDefinitionIndex"))
 		{
-			case 493, 233, 234, 241, 280, 281, 282, 283, 284, 286, 288, 362, 364, 365, 536, 542, 577, 599, 673, 729, 791, 839, 5607:
+			case 493, 233, 234, 241, 280, 281, 282, 283, 284, 286, 288, 362, 364, 365, 536, 542, 577, 599, 673, 729, 791, 839, 5607, 1069, 1070, 1132, 5604:
 			{
 				// Action slot items
 			}
